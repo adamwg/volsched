@@ -1,0 +1,16 @@
+VolSched -- An Online Volunteer Scheduler
+-----------------------------------------
+
+VolSched is an online application for scheduling volunteers to work at events.
+A hosted version is available at http://www.volsched.com.
+
+VolSched uses the Django framework (http://www.djangoproject.com/).  The current
+version relies on the (old) version 0.96.  To deploy it as-is, you will need this
+version of Django.
+
+To get it working, you need to set up a database for VolSched to use, then run
+./manage.py syncdb .  Then you can set up your web server to run VolSched using
+FastCGI, as described at
+http://docs.djangoproject.com/en/dev/howto/deployment/fastcgi/ .
+
+See the AUTHORS file for contact information.
