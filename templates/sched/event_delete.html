@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+
+{% if eventnotfound %}
+<h2>Unknown Event</h2>
+<p>You are attempting to delete an event that does not exist.</p>
+{% endif %}
+
+{% if wronguser %}
+<h2>Permission Denied</h2>
+<p>You don't have permission to delete the event specified.</p>
+{% endif %}
+
+{% if confirm %}
+<h2>Delete Event?</h2>
+<p>Are you sure you want to delete the event {{ event.name }}?
+<form name="delform" action="" method="post">
+  <input type="hidden" name="event_id" value="{{ event.id }}" />
+  <input type="checkbox" name="notify" /><label for="notify">Notify (via email) all users who have signed up for this event.</label>
+  <br />
+  <a href="javascript:document.delform.submit()">Yes, delete this event.</a> | <a href="{% url volsched.sched.views.event_details event.id %}">No, go back to the event page.</a>
+</form>
+</p>
+{% endif %}
+
+{% if deleted %}
+<h2>Event Deleted</h2>
+<p>Your event has been deleted successfully.  <a href="{% url volsched.sched.views.index %}">Back home.</a></p>
+{% endif %}
+
+</div>
+{% endblock %}

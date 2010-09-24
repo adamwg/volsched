@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+
+{% if eventnotfound %}
+<h2>Unknown Event</h2>
+<p>You are attempting to delete a shift from an event that does not exist.</p>
+{% endif %}
+
+{% if wronguser %}
+<h2>Permission Denied</h2>
+<p>You don't have permission to delete shifts from the event specified.</p>
+{% endif %}
+
+{% if jobnotfound %}
+<h2>Unknown Job</h2>
+<p>You are attempting to delete a shift of a job that does not exist.</p>
+{% endif %}
+
+{% if shiftnotfound %}
+<h2>Unknown Shift</h2>
+<p>You are attempting to delete a shift that does not exist.</p>
+{% endif %}
+
+{% if confirm %}
+<h2>Delete Shift?</h2>
+<p>Are you sure you want to delete the {{ shift.start_time }} to {{ shift.end_time }} {{ job.name }} shift from the event {{ event.name }}?
+<form name="delform" action="" method="post">
+  <input type="hidden" name="event_id" value="{{ event.id }}" />
+  <input type="hidden" name="job_id" value="{{ job.id }}" />
+  <input type="hidden" name="shift_id" value="{{ shift.id }}" />
+  <input type="checkbox" name="notify" /><label for="notify">Notify (via email) all users who have signed up for this shift.</label>
+  <br />
+  <a href="javascript:document.delform.submit()">Yes, delete this shift.</a> | <a href="{% url volsched.sched.views.job_details event.id,job.id %}">No, go back to the job page.</a>
+</form>
+</p>
+{% endif %}
+
+{% if deleted %}
+<h2>Shift Deleted</h2>
+<p>Your shift has been deleted successfully.  <a href="{% url volsched.sched.views.job_details event.id,job.id %}">Back to job details.</a></p>
+{% endif %}
+
+</div>
+{% endblock %}

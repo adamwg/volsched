@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+
+{% if eventnotfound %}
+<h2>Unknown Event</h2>
+<p>You are attempting to view volunteers for an event that does not exist.</p>
+{% endif %}
+
+{% if wronguser %}
+<h2>Permission Denied</h2>
+<p>You do not have permission to view volunteers for the specified event.  Only the event administrator can view volunteers.</p>
+{% endif %}
+
+{% if people %}
+<h2>Volunteers</h2>
+<p class="small">Event: <a href="{% url volsched.sched.views.event_details event.id %}">{{ event.name }}</a></p>
+<p>
+<table>
+<tr>
+  <td style="width: 300px;"><b>Name (Last, First)</b></td>
+  <td><b>Email Address</b></td>
+</tr>
+{% for person in people %}
+<tr>
+  <td>{{ person.last_name }}, {{ person.first_name }}</td>
+  <td>{{ person.email }}</td>
+</tr>
+{% endfor %}
+</table>
+</p>
+{% endif %}
+
+{% if not eventnotfound and not wronguser and not people %}
+<h2>Volunteers</h2>
+<p>There are no volunteers for this event yet.</p>
+{% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+<ul>
+<li><a href="{% url volsched.sched.views.index %}">Home</a></li>
+{% if user.is_authenticated %}
+<li><a href="{% url volsched.sched.views.event_new %}">New Event</a></li>
+<li><a href="{% url django.contrib.auth.views.password_change %}">Change Password</a></li>
+{% else %}
+<li><a href="{% url django.contrib.auth.views.login %}">Login</a></li>
+<li><a href="{% url volsched.sched.views.user_register %}">Register</a></li>
+{% endif %}
+</ul>

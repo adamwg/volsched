@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+
+{% if notfound %}
+<h2>Unknown Event</h2>
+<p>You are trying to see details for an event that does not exist.</p>
+{% else %}
+<h2>{{ event.name }}</h2>
+{% ifequal event.owner user %}
+<p class="small"><a href="{% url volsched.sched.views.event_edit event.id %}">Edit event</a>
+<br /><a href="{% url volsched.sched.views.event_delete event.id %}">Delete event</a>
+<br /><a href="{% url volsched.sched.views.volunteers_view event.id %}">View volunteer information</a>
+<br /><a href="{% url volsched.sched.views.signups_view event.id %}">View signups</a></p>
+{% endifequal %}
+
+<p>
+<table>
+  <tr><td><b>Event administrator:</b></td><td>{{ event.owner.first_name }} {{ event.owner.last_name }} {% if user.is_authenticated %}(<a href="mailto:{{ event.owner.email }}">{{ event.owner.email }}</a>){% endif %}</td></tr>
+  <tr><td><b>Event dates:</b></td><td>{{ event.start_date }} to {{ event.end_date }}</td></tr>
+  <tr><td><b>Event description:</b></td><td>{{ event.description }}</td></tr>
+  <tr><td><b>Event URL:</b></td><td>http://www.volsched.com{% url volsched.sched.views.event_details event.id %}</td></tr>
+  <tr><td colspan=2 class="small">You can give this URL to potential volunteers to allow them to sign up for shifts.  If this is not a public event, this is the only way to direct volunteers to this page.</td></tr>
+</table>
+</p>
+</div>
+
+{% if myshifts %}
+<div class="right">
+<h2>My Shifts</h2>
+<table>
+{% for s in myshifts %}
+<tr>
+<td>{% ifchanged %}<b>{{ s.start_time|date:"l F d, Y" }}</b>{% endifchanged %}&nbsp;</td>
+{% ifequal s.start_time.date s.end_time.date %}
+<td>{{ s.start_time|time:"H:i" }} to {{ s.end_time|time:"H:i" }}</td>
+{% else %}
+<td>{{ s.start_time|time:"H:i" }} to {{ s.end_time|time:"H:i" }} ({{ s.end_time|date:"F d" }})</td>
+{% endifequal %}
+<td><a href="{% url volsched.sched.views.shift_unsignup event.id,s.job.id,s.id %}" class="small">Remove</a></td>
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
+
+<div class="right">
+<h2>Jobs</h2>
+{% ifequal event.owner user %}
+<p class="small"><a href="{% url volsched.sched.views.job_new event.id %}">Create new job</a></p>
+{% endifequal %}
+
+{% if not jobs %}
+<p>There are no jobs for this event yet.</p>
+{% else %}
+{% for j in jobs %}
+<p><a href="{% url volsched.sched.views.job_details event.id,j.id%}"><b>{{ j.name }}</b></a> - {{ j.description }} {% ifequal event.owner user %}<a href="{% url volsched.sched.views.job_delete event.id,j.id %}" class="small">(Delete)</a>{% endifequal %}</p>
+{% endfor %}
+{% endif %}
+</div>
+
+{% endif %}
+
+{% endblock %}

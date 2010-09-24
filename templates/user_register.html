@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="right">
+<h2>Register</h2>
+{% if user.is_authenticated %}
+<p>You already have an account. No need to register again.</p>
+{% else %}
+{% if form %}
+<p>
+  We'll never sell or give away your email address.  Your email address will be:
+  <ul>
+    <li style="list-style: square inside;">Used to deliver reminders and notifications about events you sign up for.</li>
+    <li style="list-style: square inside;">Displayed to the administrator of events for which you volunteer.</li>
+    <li style="list-style: square inside;">Displayed on the pages of events you create, to logged-in users only.</li>
+  </ul>
+  <br />VolSched is committed to reducing SPAM.  If you ever receive excessive email from VolSched, please <a href="{% url volsched.sched.views.contact type="spam" %}">report it</a>.
+</p>
+<p>
+<form action="" method="post">
+  <table>
+    {{ form }}
+    <tr><td><input type="submit" value="Register" /></td></tr>
+  </table>
+</form>
+</p>
+{% endif %}
+{% if created %}
+<p>Your account has been created.  You should be receiving an email with confirmation instructions.</p>
+{% endif %}
+{% endif %}
+</div>
+{% endblock %}

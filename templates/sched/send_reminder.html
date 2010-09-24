@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+
+{% if eventnotfound %}
+<h2>Unknown Event</h2>
+<p>You are attempting to send a reminder to users signed up for an event that does not exist.</p>
+{% endif %}
+
+{% if wronguser %}
+<h2>Permission Denied</h2>
+<p>You do not have permission to send reminders for this event.  Only the event administrator can send reminders.</p>
+{% endif %}
+
+{% if jobnotfound %}
+<h2>Unknown Job</h2>
+<p>You are attempting to send a reminder to users signed up for a job that does not exist.</p>
+{% endif %}
+
+{% if not eventnotfound and not jobnotfound and not wronguser %}
+<h2>Reminder sent</h2>
+<p>Your reminder has been sent successfully.  <a href="{% url volsched.sched.views.signups_view event.id,job.id %}">Back to signups</a></p>
+{% endif %}
+
+</div>
+{% endblock %}

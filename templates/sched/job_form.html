@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+
+{% if eventnotfound %}
+<h2>Unknown Event</h2>
+<p>You are attempting to
+{% ifequal action "new" %} create {% else %} edit {% endifequal %} 
+a job for an event that does not exist.</p>
+{% endif %}
+
+{% if wronguser %}
+<h2>Permission Denied</h2>
+<p>You don't have permission to 
+{% ifequal action "new" %} create {% else %} edit {% endifequal %} 
+jobs for the event specified.</p>
+{% endif %}
+
+{% if jobnotfound %}
+<h2>Unknown Job</h2>
+<p>You're trying to edit a job that does not exist.</p>
+{% endif %}
+
+{% if not wronguser and not eventnotfound and not jobnotfound %}
+{% ifequal action "new" %}
+<h2>New Job</h2>
+{% else %}
+<h2>Edit Job</h2>
+{% endifequal %}
+<p class="small">Event: <a href="{% url volsched.sched.views.event_details event.id %}">{{ event.name }}</a></p>
+
+{% if form %}
+<p>
+<form action="" method="post">
+  <table>
+    {{ form }}
+    {% ifequal action "new" %}
+    <tr><td><input type="submit" value="Create Job" /></td></tr>
+    {% else %}
+    <tr><td><input type="submit" value="Edit Job" /></td></tr>
+    {% endifequal %}
+  </table>
+</form>
+</p>
+{% endif %}
+{% endif %}
+
+</div>
+{% endblock %}

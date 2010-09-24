@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block main %}
+{% if not user.is_authenticated %}
+<div class="right">
+<h2>Welcome</h2>
+<p>
+Welcome to VolSched, the online solution for volunteer scheduling.
+</p>
+<p>
+Finding and keeping track of volunteers is an integral part of organizing any
+event.  VolSched makes this task a bit easier.  Create an event, add jobs that
+need doing, add shifts for which volunteers can sign up, and give the handy
+URL to potential volunteers.  They can decide what they want to help with and when
+they want to help, and you can see who has signed up.  You even get the option
+of making your event findable to people without the URL, so you can recruit
+volunteers using VolSched itself.  Your volunteers only need to enter their
+contact information once to volunteer for all the events you (and others using
+VolSched) hold.
+</p>
+<p>
+Best of all, VolSched is entirely free to use.
+<a href="{% url volsched.sched.views.user_register %}">Sign up for an account and get started today!</a>
+</p>
+</div>
+{% endif %}
+
+{% if user.is_authenticated %}
+
+<div class="right">
+<h2>Home</h2>
+<p>This page displays a summary of your events and shifts, if you have any.</p>
+</div>
+
+{% if my_shifts %}
+<div class="right">
+<h2>My Upcoming Shifts</h2>
+<p>
+<table>
+{% for s in my_shifts %}
+<tr>
+<td>{% ifchanged %}<b>{{ s.start_time|date:"l F d, Y" }}</b>{% endifchanged %}&nbsp;</td>
+{% ifequal s.start_time.date s.end_time.date %}
+<td>{{ s.start_time|time:"H:i" }} to {{ s.end_time|time:"H:i" }}</td>
+{% else %}
+<td>{{ s.start_time|time:"H:i" }} to {{ s.end_time|time:"H:i" }} ({{ s.end_time|date:"F d" }})</td>
+{% endifequal %}
+<td>(<a href="{% url volsched.sched.views.job_details s.job.event.id,s.job.id %}">{{ s.job.name }}</a> 
+at <a href="{% url volsched.sched.views.event_details s.job.event.id %}">{{ s.job.event.name }}</a>)</td>
+</tr>
+{% endfor %}
+</table>
+</p>
+</div>
+{% endif %}
+
+{% if my_events_upcoming %}
+<div class="right">
+<h2>My Upcoming Events</h2>
+<p>
+  <table>
+    {% for e in my_events_upcoming %}
+    <tr><td class="small">{{ e.start_date }}</td><td><b><a href="{% url volsched.sched.views.event_details e.id %}">{{ e.name }}</a></b></td></tr>
+    <tr><td>&nbsp;</td><td>{{ e.description }}</td></tr>
+    {% endfor %}
+  </table>
+</p>
+</div>
+{% endif %}
+
+{% if my_events_past %}
+<div class="right">
+<h2>My Past Events</h2>
+<p>
+  <table>
+    {% for e in my_events_past %}
+    <tr><td class="small">{{ e.start_date }}</td><td><b><a href="{% url volsched.sched.views.event_details e.id %}">{{ e.name }}</a></b></td></tr>
+    <tr><td>&nbsp;</td><td>{{ e.description }}</td></tr>
+    {% endfor %}
+  </table>
+</p>
+</div>
+{% endif %}
+{% endif %}
+
+{% if public_events %}
+<div class="right">
+<h2>Upcoming Public Events</h2>
+<p>
+  <table>
+    {% for e in public_events %}
+    <tr><td class="small">{{ e.start_date }}</td><td><b><a href="{% url volsched.sched.views.event_details e.id %}">{{ e.name }}</a></b></td></tr>
+    <tr><td>&nbsp;</td><td>{{ e.description }}</td></tr>
+    {% endfor %}
+  </table>
+</p>
+</div>
+{% endif %}
+{% endblock %}

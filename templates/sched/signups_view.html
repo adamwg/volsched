@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="right">
+
+{% if eventnotfound %}
+<h2>Unknown Event</h2>
+<p>You are attempting to view signups for an event that does not exist.</p>
+{% endif %}
+
+{% if wronguser %}
+<h2>Permission Denied</h2>
+<p>You do not have permission to view signups for the specified event.  Only the event administrator can view signups.</p>
+{% endif %}
+
+{% if jobnotfound %}
+<h2>Unknown Job</h2>
+<p>You are attempting to view signups for a job that does not exist.</p>
+{% endif %}
+
+{% if signups %}
+<h2>Signups</h2>
+<p class="small">Event: <a href="{% url volsched.sched.views.event_details event.id %}">{{ event.name }}</a>
+{% if job %}<br />Job: <a href="{% url volsched.sched.views.job_details event.id,job.id %}">{{ job.name }}</a>{% endif %}
+<br /><a href="{% url volsched.sched.views.send_reminder event.id,job.id %}">Send reminder emails</a>
+</p>
+<p>
+<table>
+{% for s in signups %}
+<tr>
+<td>{% ifchanged %}<b>{{ s.shift.start_time|date:"l F d, Y" }}</b>{% endifchanged %}&nbsp;</td>
+<td>
+{% ifequal s.start_time.date s.end_time.date %}
+{{ s.shift.start_time|time:"H:i" }} to {{ s.shift.end_time|time:"H:i" }}
+{% else %}
+{{ s.shift.start_time|time:"H:i" }} to {{ s.shift.end_time|time:"H:i" }} ({{ s.end_time|date:"F d" }})
+{% endifequal %}
+</td>
+{% if not job %}
+<td>
+<a href="{% url volsched.sched.views.job_details event.id,s.shift.job.id %}">{{ s.shift.job.name }}</a>
+</td>
+{% endif %}
+<td>
+{{ s.person.first_name }} {{ s.person.last_name }} ({{ s.person.username }})
+</td>
+</tr>
+{% endfor %}
+</table>
+</p>
+{% endif %}
+
+{% if not eventnotfound and not wronguser and not jobnotfound and not signups %}
+<h2>Signups</h2>
+<p>There are no signups for this {% if job %} job {% else %} event {% endif %} yet.</p>
+{% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+<h2>Registration Confirmation</h2>
+{% if has_account %}
+<p>You already have an account. No need to register again.</p>
+{% endif %}
+{% if no_such_user %}
+<p>Your username, {{ username }} was not found.  Did you register before attempting to confirm?</p>
+{% endif %}
+{% if invalid_key %}
+<p>Your activation key was invalid.  Be sure that the URL you're at right now is exactly the URL that was in your confirmation email.</p>
+{% endif %}
+{% if success %}
+<p>Your account has been successfully confirmed.  You can now <a href="{% url django.contrib.auth.views.login %}">login</a>.</p>
+{% endif %}
+</div>
+{% endblock %}

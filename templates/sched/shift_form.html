@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+
+{% if eventnotfound %}
+<h2>Unknown Event</h2>
+<p>You are attempting to 
+{% ifequal action "new" %} create {% else %} edit {% endifequal %} 
+a shift for an event that does not exist.</p>
+{% endif %}
+
+{% if jobnotfound %}
+<h2>Unknown Job</h2>
+<p>You are attempting to 
+{% ifequal action "new" %} create {% else %} edit {% endifequal %} 
+a shift for a job that does not exist.</p>
+{% endif %}
+
+{% if wronguser %}
+<h2>Permission Denied</h2>
+<p>You don't have permission to 
+{% ifequal action "new" %} create {% else %} edit {% endifequal %} 
+shifts for the event specified.</p>
+{% endif %}
+
+{% if form %}
+{% ifequal action "new" %}
+<h2>New Shift</h2>
+{% else %}
+<h2>Edit Shift</h2>
+{% endifequal %}
+<p class="small">Event: <a href="{% url volsched.sched.views.event_details event.id %}">{{ event.name }}</a><br />Job: <a href="{% url volsched.sched.views.job_details event.id,job.id %}">{{ job.name }}</a></p>
+
+{% if badtimes %}
+<p>Your shift must start and end within the event's dates.</p>
+{% endif %}
+
+{% if badrequired %}
+<p>The number required is now fewer than the number already signed up.  You're on your own on this one!</p>
+{% endif %}
+
+<p>
+<form name="shiftform" action="" method="post">
+  <table>
+    {{ form }}
+    {% ifequal action "new" %}
+    <tr><td><input type="submit" value="Create Shift" /></td></tr>
+    {% else %}
+    <tr><td colspan=2><input type="checkbox" name="notify" /><label for="notify">Notify (via email) all users who have signed up for this shift.</label></td></tr>
+    <tr><td colspan=2 class="small">Users will only be notified if you've changed the times of this shift.</td></tr>
+    <tr><td><input type="submit" value="Edit Shift" /></td></tr>
+    {% endifequal %}
+  </table>
+</form>
+</p>
+{% endif %}
+
+</div>
+{% endblock %}

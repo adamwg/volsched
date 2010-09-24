@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>VolSched - The Online Volunteer Scheduling Solution</title>
+    <link rel="stylesheet" type="text/css" href="http://static.volsched.com/style.css" media="screen" />
+    <!-- calendar -->
+    <link rel="stylesheet" type="text/css" href="http://static.volsched.com/calendar.css" />
+    <script type="text/javascript" src="http://static.volsched.com/calendar/calendar_stripped.js"></script>
+    <script type="text/javascript" src="http://static.volsched.com/calendar/lang/calendar-en.js"></script>
+    <script type="text/javascript" src="http://static.volsched.com/calendar/calendar-setup_stripped.js"></script>
+    <!-- /calendar -->
+    <meta name="verify-v1" content="T7JWyqEMjE6H7pFJvWPSAarFM98UOJErjAoilR81yCY=" />
+  </head>
+  <body>
+    <div id="header">
+      <div id="title"><h1><a href="{% url volsched.sched.views.index %}">VolSched</a></h1></div>
+      <div id="userinfo">
+        <p>
+          {% if user.is_authenticated %}
+          Welcome back, {{ user.username }}. | <a href="{% url django.contrib.auth.views.logout %}">Logout</a>
+          {% else %}
+          <a href="{% url django.contrib.auth.views.login %}">Login</a> | <a href="{% url volsched.sched.views.user_register %}">Register</a>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+    <div id="content">
+      
+      <div id="left">
+	<div class="box">
+          {% include "nav.html" %}
+	</div>
+	
+	<div class="box">
+          <script type="text/javascript"><!--
+                                             google_ad_client = "pub-9350778050046997";
+                                             /* VolSched */
+                                             google_ad_slot = "5819442697";
+                                             google_ad_width = 160;
+                                             google_ad_height = 600;
+                                             //-->
+          </script>
+          <script type="text/javascript"
+                  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+          </script>
+	</div>
+	
+        <div class="small box">
+          <p><a href="{% url volsched.sched.views.copyright %}">Copyright and Contact Information</a>
+          <br /><a href="{% url volsched.sched.views.contact type="bug" %}">Bug Report/Feature Request</a>
+          <br /><a href="{% url volsched.sched.views.contact type="spam" %}">Report VolSched-Related Spam</a>
+          <br />Current Version: 1.0</p>
+	</div>
+      </div>
+
+      {% block main %}{% endblock %}
+      
+    </div>
+
+  <script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+  var pageTracker = _gat._getTracker("UA-498823-8");
+  pageTracker._initData();
+  pageTracker._trackPageview();
+  </script>
+  </body>
+</html>

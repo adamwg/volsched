@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+
+{% if notfound %}
+<h2>Unknown Event</h2>
+<p>You're trying to edit an event that does not exist.</p>
+{% endif %}
+
+{% if wronguser %}
+<h2>Permission Denied</h2>
+<p>You do not have permission to edit the specified event.</p>
+{% endif %}
+
+{% if not wronguser and not notfound %}
+{% ifequal action "new" %}
+<h2>New Event</h2>
+{% else %}
+<h2>Edit Event</h2>
+{% endifequal %}
+
+{% if form %}
+<p>
+<form name="eventform" action="" method="post">
+  <table>
+
+    {% if badshifts %}
+    <input type="hidden" name="whattodo" value="nothing" />
+    <tr><td colspan=2>Your changes to the event have made some of the shifts for jobs in this event invalid.  <a href="javascript:document.eventform.whattodo.value='delete';document.eventform.submit();">Click here to delete the invalid shifts, leaving all valid shifts untouched</a>, or continue editing below.</td></tr>
+    {% endif %}
+
+    {{ form }}
+    <tr><td class="small" colspan=2>(Public events will show up on VolSched's homepage.)</td></tr>
+    {% ifequal action "new" %}
+    <tr><td><input type="submit" value="Create Event" /></td></tr>
+    {% else %}
+    <tr><td><input type="submit" value="Edit Event" /></td></tr>
+    {% endifequal %}
+  </table>
+</form>
+</p>
+{% endif %}
+{% endif %}
+
+</div>
+{% endblock %}

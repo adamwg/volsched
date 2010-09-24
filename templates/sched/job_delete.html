@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+
+{% if eventnotfound %}
+<h2>Unknown Event</h2>
+<p>You are attempting to delete a job from an event that does not exist.</p>
+{% endif %}
+
+{% if wronguser %}
+<h2>Permission Denied</h2>
+<p>You don't have permission to delete jobs from the event specified.</p>
+{% endif %}
+
+{% if jobnotfound %}
+<h2>Unknown Job</h2>
+<p>You are attempting to delete a job that does not exist.</p>
+{% endif %}
+
+{% if confirm %}
+<h2>Delete Job?</h2>
+<p>Are you sure you want to delete the job {{ job.name }} from the event {{ event.name }}?
+<form name="delform" action="" method="post">
+  <input type="hidden" name="event_id" value="{{ event.id }}" />
+  <input type="hidden" name="job_id" value="{{ job.id }}" />
+  <input type="checkbox" name="notify" /><label for="notify">Notify (via email) all users who have signed up for this job.</label>
+  <br />
+  <a href="javascript:document.delform.submit()">Yes, delete this job.</a> | <a href="{% url volsched.sched.views.event_details event.id %}">No, go back to the event page.</a>
+</form>
+</p>
+{% endif %}
+
+</div>
+{% endblock %}

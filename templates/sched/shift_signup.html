@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+
+{% if eventnotfound %}
+<h2>Unknown Event</h2>
+<p>You are attempting to signup for a shift in an event that does not exist.</p>
+{% endif %}
+
+{% if jobnotfound %}
+<h2>Unknown Job</h2>
+<p>You are attempting to signup for a shift of a job that does not exist.</p>
+{% endif %}
+
+{% if shiftnotfound %}
+<h2>Unknown Shift</h2>
+<p>You are attempting to signup for a shift that does not exist.</p>
+{% endif %}
+
+{% if overlap %}
+<h2>Overlap</h2>
+<p>You can't sign up for this shift because it overlaps with your {{ badshift.job.name }} shift at the event {{ badshift.job.event.name }}.
+<a href="{% url volsched.sched.views.job_details event.id,job.id %}">Back to job details.</a></p>
+{% endif %}
+
+{% if notsignedup %}
+<h2>Not Signed Up</h2>
+<p>You can't remove this shift because you have not signed up for it.</p>
+{% endif %}
+
+</div>
+{% endblock %}

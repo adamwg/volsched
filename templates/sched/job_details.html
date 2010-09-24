@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+
+{% if eventnotfound %}
+<h2>Unknown Event</h2>
+<p>You're trying to see details for a job in an event that does not exist.</p>
+{% endif %}
+
+{% if jobnotfound %}
+<h2>Unknown Job</h2>
+<p>You're trying to see details of a job that does not exist.</p>
+{% endif %}
+
+<h2>{{ job.name }}</h2>
+
+<p class="small">Event: <a href="{% url volsched.sched.views.event_details event.id %}">{{ event.name }}</a>
+{% ifequal event.owner user %}
+<br /><a href="{% url volsched.sched.views.job_edit event.id,job.id %}">Edit job</a>
+<br /><a href="{% url volsched.sched.views.job_delete event.id,job.id %}">Delete job</a>
+<br /><a href="{% url volsched.sched.views.signups_view event.id,job.id %}">View signups</a>
+{% endifequal %}
+</p>
+
+<p>
+{{ job.description }}
+</p>
+</div>
+
+{% if myshifts %}
+<div class="right">
+<h2>My Shifts</h2>
+<table>
+{% for s in myshifts %}
+<tr>
+<td>{% ifchanged %}<b>{{ s.start_time|date:"l F d, Y" }}</b>{% endifchanged %}&nbsp;</td>
+{% ifequal s.start_time.date s.end_time.date %}
+<td>{{ s.start_time|time:"H:i" }} to {{ s.end_time|time:"H:i" }}</td>
+{% else %}
+<td>{{ s.start_time|time:"H:i" }} to {{ s.end_time|time:"H:i" }} ({{ s.end_time|date:"F d" }})</td>
+{% endifequal %}
+<td><a href="{% url volsched.sched.views.shift_unsignup event.id,s.job.id,s.id %}" class="small">Remove</a></td>
+{% ifequal event.owner user %}
+<td><a href="{% url volsched.sched.views.shift_edit event.id,job.id,s.id %}" class="small">(Edit)</a></td>
+<td><a href="{% url volsched.sched.views.shift_delete event.id,job.id,s.id %}" class="small">(Delete)</a></td>
+{% endifequal %}
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
+
+<div class="right">
+<h2>Shifts</h2>
+{% ifequal event.owner user %}
+<p class="small"><a href="{% url volsched.sched.views.shift_new event.id,job.id %}">Create new shift</a></p>
+{% endifequal %}
+
+{% if not shifts %}
+<p>There are no available shifts for this job, or you are signed up for all of them.</p>
+{% else %}
+<table>
+{% for s in shifts %}
+<tr>
+<td>{% ifchanged %}<b>{{ s.start_time|date:"l F d, Y" }}</b>{% endifchanged %}&nbsp;</td>
+{% ifequal s.start_time.date s.end_time.date %}
+<td>{{ s.start_time|time:"H:i" }} to {{ s.end_time|time:"H:i" }}</td>
+{% else %}
+<td>{{ s.start_time|time:"H:i" }} to {{ s.end_time|time:"H:i" }} ({{ s.end_time|date:"F d" }})</td>
+{% endifequal %}
+<td>{{ s.number_required }} volunteers needed</td>
+<td><a href="{% url volsched.sched.views.shift_signup event.id,job.id,s.id %}" class="small">Signup</a></td>
+{% ifequal event.owner user %}
+<td><a href="{% url volsched.sched.views.shift_edit event.id,job.id,s.id %}" class="small">(Edit)</a></td>
+<td><a href="{% url volsched.sched.views.shift_delete event.id,job.id,s.id %}" class="small">(Delete)</a></td>
+{% endifequal %}
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+</div>
+
+{% if fullshifts %}
+<div class="right">
+<h2>Full Shifts</h2>
+<table>
+{% for s in fullshifts %}
+<tr>
+<td>{% ifchanged %}<b>{{ s.start_time|date:"l F d, Y" }}</b>{% endifchanged %}&nbsp;</td>
+{% ifequal s.start_time.date s.end_time.date %}
+<td>{{ s.start_time|time:"H:i" }} to {{ s.end_time|time:"H:i" }}</td>
+{% else %}
+<td>{{ s.start_time|time:"H:i" }} to {{ s.end_time|time:"H:i" }} ({{ s.end_time|date:"F d" }})</td>
+{% endifequal %}
+{% ifequal event.owner user %}
+<td><a href="{% url volsched.sched.views.shift_edit event.id,job.id,s.id %}" class="small">(Edit)</a></td>
+<td><a href="{% url volsched.sched.views.shift_delete event.id,job.id,s.id %}" class="small">(Delete)</a></td>
+{% endifequal %}
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
+
+{% endblock %}

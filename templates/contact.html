@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="right">
+
+{% if badtype %}
+<h2>Bad Message Type</h2>
+<p>Invalid message type specified.</p>
+{% endif %}
+
+{% if form %}
+<h2>{{ title }}</h2>
+<p>
+<form action="" method="post">
+  <table>
+    {{ form }}
+    <tr><td><input type="submit" value="Send Message" /></td></tr>
+  </table>
+</form>
+</p>
+{% endif %}
+
+{% if sent %}
+<h2>{{ title }} Sent</h2>
+<p>Your message has been sent.  Thank you.</p>
+{% endif %}
+
+</div>
+{% endblock %}
